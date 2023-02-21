@@ -36,6 +36,11 @@
     fill: green;
 }
 
+
+rect:hover{
+    fill: green;
+}
+
 .tooltip{
   position: absolute;
   background-color: grey;

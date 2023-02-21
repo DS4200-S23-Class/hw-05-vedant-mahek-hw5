@@ -80,7 +80,7 @@ function addPoint() {
 let pointButton = document.getElementById("point-button");
 pointButton.addEventListener("click", addPoint);
 
-const TOOLTIP = d3.select(".gen")
+const TOOLTIP = d3.select("#vis")
                     .append("div")
                     .attr("class", "tooltip")
                     .style("opacity", 0); 
@@ -124,20 +124,13 @@ const TOOLTIP = d3.select(".gen")
                     .append("svg")
                         .attr("height", FRAME_HEIGHT)
                         .attr("width", FRAME_WIDTH)
-                        .attr("fill", "blue")
                         .attr("class", "frame");
 
-
-    FRAME1.selectAll(".bar")
-            .on("mouseover", handleMouseover)
-            .on("mousemove", handleMousemove)
-            .on("mouseleave", handleMouseleave);
 
 function plot(){
     d3.csv("data/bar-data.csv").then((data) => { 
 
-        const Y_MIN = d3.min(data, (d) => { return parseInt(d.y); });
-        const Y_MAX = d3.max(data, (d) => { return parseInt(d.y); });
+        const Y_MAX = d3.max(data, (d) => { return parseInt(d.amount); });
         
         const X_SCALE = d3.scaleBand()
             .range([0, VIS_WIDTH])
@@ -145,18 +138,18 @@ function plot(){
             
         const Y_SCALE = d3.scaleLinear() 
             .domain([0, Y_MAX])
-            .range(VIS_HEIGHT, MARGINS.top);
-        
+            .range([VIS_HEIGHT, MARGINS.top]);
 
-    FRAME1.selectAll('rect')
-        .data(data)
-		.enter()
-		.append("rect")
-        .attr("x", (d) => { return ((X_SCALE(d.category)) + MARGINS.left); }) 
-        .attr("y", (d) => { return (Y_SCALE(d.amount) + MARGINS.top); }) 
-        .attr("class", "bar")
-        .attr("fill  ")
-        .attr("width", 30);
+        FRAME1.selectAll('bars')
+            .data(data)
+            .enter()
+            .append('rect')
+            .attr("x", (d) => { return X_SCALE(d.category) + MARGINS.left; })
+            .attr("y", (d) => { return Y_SCALE(d.amount) + MARGINS.bottom; })
+              .attr('width', X_SCALE.bandwidth())
+              .attr('height', (d) => VIS_HEIGHT - Y_SCALE(d.amount))
+              .attr('fill', 'powderblue')
+              .attr('class', 'bar');
 
 
     FRAME1.append("g")
@@ -169,13 +162,32 @@ function plot(){
         .attr("transform", "translate(" + MARGINS.left + "," + MARGINS.top + ")")
         .call(d3.axisLeft(Y_SCALE).ticks(9))
         .attr("font-size", "20px");
+    
+    const TOOLTIP2 = d3.select("#bar")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0); 
+
+    function barMousemove(event, d) {
+        TOOLTIP2.html("Category:" + d.category + "<br>Value: " + d.amount)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 50) + "px")
+        }
+    
+    function barMouseover(event, d) {
+            TOOLTIP2.style("opacity", 1)
+        }
+    
+    function barMouseleave(event, d) {
+            TOOLTIP2.style("opacity", 0)
+        }
+
+
+    FRAME1.selectAll(".bar")
+        .on("mouseover", barMouseover)
+        .on("mousemove", barMousemove)
+        .on("mouseleave", barMouseleave);
         
-    FRAME1.append("text")
-        .attr("x", MARGINS.left + VIS_WIDTH/2)
-        .attr("y", MARGINS.top - 25)
-	    .style("font-size", "10px")
-	    .text("Bar Graph");
-         
 
 });  
 
