@@ -3,11 +3,70 @@
 
 <head>
     <meta charset=utf-8/>
+    <title>hw-05</title>
+    <script src="js/d3.v6.1.1/d3.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 
 <body>
+    
+    <h1 class="centered"> hw-05: Interactive Graph with D3 </h1>
 
+    <div class="flex">
+        <div class="column left">
+            <div class="gen">
+                <div id="vis"></div>
+                <div id="bar"></div>
+        
+        
+            </div>
+        </div>
+        
+          <div class="column right">
+            <div class="dropdown">
+                <p> Select x coordinate</p>
+                <select id="x">
+                    <script>
+                        for (let i = 1; i <= 9; i++) {
+                            document.write("<option value='" + i + "'>" + i + "</option>");
+                        }
+                    </script>
+            </select>
+            </div>
+        
+            <div class="dropdown">
+                <p> Select y coordinate</p>
+                <select id="y">
+                    <script>
+                        for (let i = 1; i <= 9; i++) {
+                            document.write("<option value='" + i + "'>" + i + "</option>");
+                        }
+                    </script>
+            </select>
+            </div>
+        
+            <button type="button" id="point-button">Add point to graph</button>
+        
+            <p id="output"> Point coordinates: </p>
+        
+        
+        </div>
+        
+        </div>
+        
+        <div>
+            <h2 class="centered"> Acknowledgements </h2>
+            <div>
+                <ul>
+                    <li>https://amosca01.github.io/DS4200-S23/</li>
+                </ul>
+            </div>
+        </div>
+
+
+    
+    <script src="js/main.js"></script>
 
 </body>
 
