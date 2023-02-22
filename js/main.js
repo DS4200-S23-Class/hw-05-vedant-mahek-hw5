@@ -51,73 +51,57 @@ d3.csv("data/scatter-data.csv").then((data) => {
             .call(d3.axisLeft(Y_SCALE2).ticks(9))
             .attr("font-size", "20px");
 
+    function addPoint() {
+        const X_SCALE2 = d3.scaleLinear()
+                        .domain([0, 9])
+                        .range([0, VIS_WIDTH]);
+    
+        const Y_SCALE2 = d3.scaleLinear()
+                            .domain([0, 9])
+                            .range([VIS_HEIGHT, 0]);
+    
+        let xCoord = document.getElementById("x").value
+        let yCoord = document.getElementById("y").value
+    
+        // add point to plot
+        FRAME2.append("circle")
+            .attr("cx", () => {return X_SCALE2(xCoord) + MARGINS.left})
+            .attr("cy", () => {return Y_SCALE2(yCoord) + MARGINS.top})
+            .attr("r", 10)
+            .attr("class", "point");
+        
+        FRAME2.selectAll(".point").on("click", handleClick);
+    }
+    
+    // add event listener to add point to plot
+    let pointButton = document.getElementById("point-button");
+    pointButton.addEventListener("click", addPoint);
+
+    //click point
+    function handleClick(event, d) {
+        this.classList.toggle("border")
+        let x_coord = d3.select(this).attr("cx");
+        let y_coord = d3.select(this).attr("cy");
+
+        x_coord = Math.round(X_SCALE2.invert(x_coord - MARGINS.left));
+        y_coord = Math.round(Y_SCALE2.invert(y_coord - MARGINS.top));
+        document.getElementById('output').innerHTML = `Last point clicked (${x_coord}, ${y_coord})`
+    }
+
+    FRAME2.selectAll(".point").on("click", handleClick);
 
 });
 }
 scatter_plot()
     
-function addPoint() {
-    const X_SCALE2 = d3.scaleLinear()
-                    .domain([0, 9])
-                    .range([0, VIS_WIDTH]);
 
-    const Y_SCALE2 = d3.scaleLinear()
-                        .domain([0, 9])
-                        .range([VIS_HEIGHT, 0]);
-
-    let xCoord = document.getElementById("x").value
-    let yCoord = document.getElementById("y").value
-
-    // add point to plot
-    FRAME2.append("circle")
-        .attr("cx", () => {return X_SCALE2(xCoord) + MARGINS.left})
-        .attr("cy", () => {return Y_SCALE2(yCoord) + MARGINS.top})
-        .attr("r", 10)
-        .attr("class", "point");
-}
-
-// add event listener to add point to plot
-let pointButton = document.getElementById("point-button");
-pointButton.addEventListener("click", addPoint);
 
 const TOOLTIP = d3.select("#vis")
                     .append("div")
                     .attr("class", "tooltip")
                     .style("opacity", 0); 
 
-
-
-    //click point
-    function handleClick(event, d) {
-        d.classList.toggle("border")
-        console.log("clicked")
-        // TOOLTIP.style("opacity", 1)
-        // TOOLTIP.innerHTML = `Last point clicked (${d.x}, ${d.y})`
-        document.getElementById('output').innerHTML = "Selected Point Coordinates: " + "(" +xcoor + ", " + ycoor + ")";
-    }
-
-    // add event listeners to points
-    FRAME2.selectAll(".point")
-            .on("click", handleClick);
-
-    // mouseover
-    function handleMouseover(event, d) {
-        TOOLTIP.style("opacity", 1)
-    }
-
-    // mousemove
-    function handleMousemove(event, d) {
-        TOOLTIP.html("Name: " + d.name + "<br>Value:" + d.x)
-                .style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 50) + "px")
-
-    }
-
-    //mouseleave
-    function handleMouseleave(event, d) {
-        TOOLTIP.style("opacity", 0)
-
-    }
+ 
     
     // bar graph
     const FRAME1 = d3.select("#bar")
