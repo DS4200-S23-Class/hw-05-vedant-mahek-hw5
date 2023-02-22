@@ -10,7 +10,7 @@ const FRAME2 = d3.select("#vis")
                     .append("svg")
                         .attr("height", FRAME_HEIGHT)
                         .attr("width", FRAME_WIDTH)
-                        .attr("class", "frame")
+                        .attr("class", "frame");
 
 function scatter_plot() { 
 d3.csv("data/scatter-data.csv").then((data) => {
@@ -60,8 +60,8 @@ d3.csv("data/scatter-data.csv").then((data) => {
                             .domain([0, 9])
                             .range([VIS_HEIGHT, 0]);
     
-        let xCoord = document.getElementById("x").value
-        let yCoord = document.getElementById("y").value
+        let xCoord = document.getElementById("x").value;
+        let yCoord = document.getElementById("y").value;
     
         // add point to plot
         FRAME2.append("circle")
@@ -95,20 +95,14 @@ d3.csv("data/scatter-data.csv").then((data) => {
 scatter_plot()
     
 
-
-const TOOLTIP = d3.select("#vis")
-                    .append("div")
-                    .attr("class", "tooltip")
-                    .style("opacity", 0); 
-
  
     
-    // bar graph
-    const FRAME1 = d3.select("#bar")
-                    .append("svg")
-                        .attr("height", FRAME_HEIGHT)
-                        .attr("width", FRAME_WIDTH)
-                        .attr("class", "frame");
+// bar graph
+const FRAME1 = d3.select("#bar")
+                  .append("svg")
+                  .attr("height", FRAME_HEIGHT)
+                  .attr("width", FRAME_WIDTH)
+                  .attr("class", "frame");
 
 
 function plot(){
@@ -147,23 +141,23 @@ function plot(){
         .call(d3.axisLeft(Y_SCALE).ticks(9))
         .attr("font-size", "20px");
     
-    const TOOLTIP2 = d3.select("#bar")
+    const TOOLTIP = d3.select("#bar")
         .append("div")
         .attr("class", "tooltip")
         .style("opacity", 0); 
 
     function barMousemove(event, d) {
-        TOOLTIP2.html("Category:" + d.category + "<br>Value: " + d.amount)
+        TOOLTIP.html("Category:" + d.category + "<br>Value: " + d.amount)
                 .style("left", (event.pageX + 10) + "px")
                 .style("top", (event.pageY - 50) + "px")
         }
     
     function barMouseover(event, d) {
-            TOOLTIP2.style("opacity", 1)
+            TOOLTIP.style("opacity", 1)
         }
     
     function barMouseleave(event, d) {
-            TOOLTIP2.style("opacity", 0)
+            TOOLTIP.style("opacity", 0)
         }
 
 
